@@ -1,0 +1,228 @@
+digraph data {
+	"prov№0
+39"
+	"prov№1
+64"
+	"prov№2
+17"
+	"prov№3
+41"
+	"prov№4
+47"
+	"prov№5
+74"
+	"prov№6
+50"
+	"prov№7
+36"
+	"cons№0
+58"
+	"cons№1
+20"
+	"cons№2
+76"
+	"cons№3
+25"
+	"cons№4
+39"
+	"cons№5
+20"
+	"cons№6
+19"
+	"cons№7
+93"
+	"cons№8
+18"
+	"prov№0
+39" -> "cons№0
+58" [label=52]
+	"prov№0
+39" -> "cons№1
+20" [label=58]
+	"prov№0
+39" -> "cons№2
+76" [label=37]
+	"prov№0
+39" -> "cons№3
+25" [label=11]
+	"prov№0
+39" -> "cons№4
+39" [label=61]
+	"prov№0
+39" -> "cons№5
+20" [label=12]
+	"prov№0
+39" -> "cons№6
+19" [label=82]
+	"prov№0
+39" -> "cons№7
+93" [label=36]
+	"prov№1
+64" -> "cons№0
+58" [label=89]
+	"prov№1
+64" -> "cons№1
+20" [label=30]
+	"prov№1
+64" -> "cons№2
+76" [label=49]
+	"prov№1
+64" -> "cons№3
+25" [label=30]
+	"prov№1
+64" -> "cons№4
+39" [label=69]
+	"prov№1
+64" -> "cons№5
+20" [label=65]
+	"prov№1
+64" -> "cons№6
+19" [label=65]
+	"prov№1
+64" -> "cons№7
+93" [label=15]
+	"prov№2
+17" -> "cons№0
+58" [label=50]
+	"prov№2
+17" -> "cons№1
+20" [label=63]
+	"prov№2
+17" -> "cons№2
+76" [label=56]
+	"prov№2
+17" -> "cons№3
+25" [label=93]
+	"prov№2
+17" -> "cons№4
+39" [label=53]
+	"prov№2
+17" -> "cons№5
+20" [label=47]
+	"prov№2
+17" -> "cons№6
+19" [label=77]
+	"prov№2
+17" -> "cons№7
+93" [label=97]
+	"prov№3
+41" -> "cons№0
+58" [label=49]
+	"prov№3
+41" -> "cons№1
+20" [label=90]
+	"prov№3
+41" -> "cons№2
+76" [label=88]
+	"prov№3
+41" -> "cons№3
+25" [label=21]
+	"prov№3
+41" -> "cons№4
+39" [label=58]
+	"prov№3
+41" -> "cons№5
+20" [label=78]
+	"prov№3
+41" -> "cons№6
+19" [label=61]
+	"prov№3
+41" -> "cons№7
+93" [label=42]
+	"prov№4
+47" -> "cons№0
+58" [label=39]
+	"prov№4
+47" -> "cons№1
+20" [label=88]
+	"prov№4
+47" -> "cons№2
+76" [label=76]
+	"prov№4
+47" -> "cons№3
+25" [label=57]
+	"prov№4
+47" -> "cons№4
+39" [label=28]
+	"prov№4
+47" -> "cons№5
+20" [label=91]
+	"prov№4
+47" -> "cons№6
+19" [label=82]
+	"prov№4
+47" -> "cons№7
+93" [label=66]
+	"prov№5
+74" -> "cons№0
+58" [label=66]
+	"prov№5
+74" -> "cons№1
+20" [label=62]
+	"prov№5
+74" -> "cons№2
+76" [label=23]
+	"prov№5
+74" -> "cons№3
+25" [label=88]
+	"prov№5
+74" -> "cons№4
+39" [label=74]
+	"prov№5
+74" -> "cons№5
+20" [label=92]
+	"prov№5
+74" -> "cons№6
+19" [label=17]
+	"prov№5
+74" -> "cons№7
+93" [label=58]
+	"prov№6
+50" -> "cons№0
+58" [label=21]
+	"prov№6
+50" -> "cons№1
+20" [label=16]
+	"prov№6
+50" -> "cons№2
+76" [label=78]
+	"prov№6
+50" -> "cons№3
+25" [label=42]
+	"prov№6
+50" -> "cons№4
+39" [label=77]
+	"prov№6
+50" -> "cons№5
+20" [label=17]
+	"prov№6
+50" -> "cons№6
+19" [label=90]
+	"prov№6
+50" -> "cons№7
+93" [label=15]
+	"prov№7
+36" -> "cons№0
+58" [label=81]
+	"prov№7
+36" -> "cons№1
+20" [label=24]
+	"prov№7
+36" -> "cons№2
+76" [label=53]
+	"prov№7
+36" -> "cons№3
+25" [label=70]
+	"prov№7
+36" -> "cons№4
+39" [label=21]
+	"prov№7
+36" -> "cons№5
+20" [label=96]
+	"prov№7
+36" -> "cons№6
+19" [label=27]
+	"prov№7
+36" -> "cons№7
+93" [label=97]
+}
