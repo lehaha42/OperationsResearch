@@ -1,62 +1,111 @@
-import json
+from pulp import *
 
 
-def show(arr):
-    for i in range(3):
-        for j in range(3):
-            for k in range(3):
-                for l in range(3):
-                    print(f'{arr[i*3+j][k*3+l]} ', end='')
-                if k < 2:
-                    print('  ', end='')
+def show(arr, pos_arr):
+    size = [0, 0]
+    for p in pos_arr:
+        size = [max(size[0], p[0]+9), max(size[1], p[1]+9)]
+
+    s = [[-1 for _ in range(size[1])] for _ in range(size[0])]
+    for n in range(len(arr)):
+        for i in range(9):
+            for j in range(9):
+                s[i+pos_arr[n][0]][j+pos_arr[n][1]] = arr[n][i][j]
+
+    for i in range(size[0]):
+        if i % 3 == 0 and i != 0:
             print()
+        for j in range(size[1]):
+            if j % 3 == 0 and j != 0:
+                print('   ', end='')
+            if s[i][j] != -1:
+                print(f'{s[i][j]}  ', end='')
+            else:
+                print('   ', end='')
         print()
 
 
-def can_put(arr, x, y, n):
-    for i in range(9):
-        if i != x and arr[i][y] == n or i != y and arr[x][i] == n:
-            return False
-    for i in range(3):
-        for j in range(3):
-            if not (i == x % 3 and j == y % 3) and arr[i + (x//3)*3][j + (y//3)*3] == n:
-                return False
-    return True
+def solve(data):
+    prob = LpProblem("sudoku")
+
+    pos_arr = []
+    arr = []
+    choices = []
+    for num in range(len(data)):
+
+        choices.append(LpVariable.dict(f"Choice_{num}", (range(9), range(9), range(1, 10)), cat=LpBinary))
+
+        for i in range(9):
+            for j in range(9):
+                prob += lpSum([choices[num][(i, j, k)] for k in range(1, 10)]) == 1
+
+        for i in range(9):
+            for k in range(1, 10):
+                prob += lpSum([choices[num][(i, j, k)] for j in range(9)]) == 1
+
+        for j in range(9):
+            for k in range(1, 10):
+                prob += lpSum([choices[num][(i, j, k)] for i in range(9)]) == 1
+
+        for r in range(3):
+            for c in range(3):
+                for k in range(1, 10):
+                    prob += lpSum([choices[num][(i, j, k)]
+                                   for i in range(r*3, (r+1)*3)
+                                   for j in range(c*3, (c+1)*3)]) == 1
+
+        for i in range(9):
+            for j in range(9):
+                if data[0]['arr'][i][j] != 0:
+                    k = data[0]['arr'][i][j]
+                    prob += choices[num][(i, j, k)] == 1
+
+        p = data[num]['pos']
+        for n in range(len(pos_arr)):
+            pos = pos_arr[n]
+            for i in range(max(p[0], pos[0]), min(p[0]+9, pos[0]+9)):
+                for j in range(max(p[1], pos[1]), min(p[1]+9, pos[1]+9)):
+                    for k in range(1, 10):
+                        prob += choices[n][(i-pos[0], j-pos[1], k)] == choices[num][(i-p[0], j-p[1], k)]
+
+        pos_arr.append(p)
+        arr.append(data[num]['arr'])
+
+    prob.solve()
+
+    if LpStatus[prob.status] != "Optimal":
+        print("ERROR")
+        return [arr, [], pos_arr]
+
+    solutions = [[[0 for _ in range(9)] for _ in range(9)] for _ in range(len(data))]
+    for n in range(len(data)):
+        for i in range(9):
+            for j in range(9):
+                for k in range(1, 10):
+                    if choices[n][(i, j, k)].value() == 1:
+                        solutions[n][i][j] = k
+                        break
+
+    return [arr, solutions, pos_arr]
 
 
-def solve(arr):
-    print('quest:')
-    show(arr)
-    ans = [[arr[i][j] for j in range(9)] for i in range(9)]
-    i = 0
-    b = 0
-    while i < 81:
-        x, y = i//9, i % 9
-        if arr[x][y] != 0:
-            if b == 0:
-                i += 1
-            else:
-                i -= 1
-            continue
-        if ans[x][y] < 9:
-            if can_put(ans, x, y, ans[x][y]+1):
-                i += 1
-            b = 0
-            ans[x][y] += 1
-        else:
-            ans[x][y] = 0
-            b = 1
-            i -= 1
-    print('answer:')
-    show(ans)
+def dispay(solution):
+    print("\nquest:\n")
+    show(solution[0], solution[2])
+    print("\nanswer:\n")
+    show(solution[1], solution[2])
 
 
 def main():
+    solutions = []
     with open("data.json", "r") as file:
         data = json.loads(file.read())
-    for name, arr in data.items():
-        print(f'\n\n{name}')
-        solve(arr)
+        for name, s_data in data.items():
+            print(f'\n\n{name}')
+            solutions.append(solve(s_data))
+        for name, _ in data.items():
+            print(f'\n\n{name}')
+            dispay(solutions.pop(0))
 
 
 if __name__ == '__main__':
