@@ -30,27 +30,27 @@ def solve(data):
 
     pos_arr = []
     arr = []
-    choices = []
-    for num in range(len(data)):
+    connections = []
+    choices = [LpVariable.dicts(f"Choice_{i}", (range(9), range(9), range(1, 10)), cat=LpBinary) for i in range(len(data))]
 
-        choices.append(LpVariable.dict(f"Choice_{num}", (range(9), range(9), range(1, 10)), cat=LpBinary))
+    for num in range(len(data)):
 
         for i in range(9):
             for j in range(9):
-                prob += lpSum([choices[num][(i, j, k)] for k in range(1, 10)]) == 1
+                prob += lpSum([choices[num][i][j][k] for k in range(1, 10)]) == 1
 
         for i in range(9):
             for k in range(1, 10):
-                prob += lpSum([choices[num][(i, j, k)] for j in range(9)]) == 1
+                prob += lpSum([choices[num][i][j][k] for j in range(9)]) == 1
 
         for j in range(9):
             for k in range(1, 10):
-                prob += lpSum([choices[num][(i, j, k)] for i in range(9)]) == 1
+                prob += lpSum([choices[num][i][j][k] for i in range(9)]) == 1
 
         for r in range(3):
             for c in range(3):
                 for k in range(1, 10):
-                    prob += lpSum([choices[num][(i, j, k)]
+                    prob += lpSum([choices[num][i][j][k]
                                    for i in range(r*3, (r+1)*3)
                                    for j in range(c*3, (c+1)*3)]) == 1
 
@@ -58,18 +58,21 @@ def solve(data):
             for j in range(9):
                 if data[0]['arr'][i][j] != 0:
                     k = data[0]['arr'][i][j]
-                    prob += choices[num][(i, j, k)] == 1
+                    prob += choices[num][i][j][k] == 1
 
         p = data[num]['pos']
         for n in range(len(pos_arr)):
             pos = pos_arr[n]
             for i in range(max(p[0], pos[0]), min(p[0]+9, pos[0]+9)):
                 for j in range(max(p[1], pos[1]), min(p[1]+9, pos[1]+9)):
-                    for k in range(1, 10):
-                        prob += choices[n][(i-pos[0], j-pos[1], k)] == choices[num][(i-p[0], j-p[1], k)]
+                    connections.append((n, i-pos[0], j-pos[1], num, i-p[0], j-p[1]))
 
         pos_arr.append(p)
         arr.append(data[num]['arr'])
+
+    for g1, i1, j1, g2, i2, j2 in connections:
+        for k in range(1, 10):
+            prob += choices[g1][i1][j1][k] == choices[g2][i2][j2][k]
 
     prob.solve()
 
@@ -82,7 +85,7 @@ def solve(data):
         for i in range(9):
             for j in range(9):
                 for k in range(1, 10):
-                    if choices[n][(i, j, k)].value() == 1:
+                    if choices[n][i][j][k].value() == 1:
                         solutions[n][i][j] = k
                         break
 
