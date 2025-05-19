@@ -69,8 +69,8 @@ def solve(data):
         # ввод изначальных значений
         for i in range(9):
             for j in range(9):
-                if data[0]['arr'][i][j] != 0:
-                    k = data[0]['arr'][i][j]
+                if data[num]['arr'][i][j] != 0:
+                    k = data[num]['arr'][i][j]
                     prob += choices[num][i][j][k] == 1
 
         # оброаботка пересечений
