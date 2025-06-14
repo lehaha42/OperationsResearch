@@ -1,0 +1,4 @@
+/.venv
+/.idea
+/t?/*.html
+/t?/lib
