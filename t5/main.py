@@ -5,7 +5,7 @@ from itertools import combinations
 
 
 def create_weighted_graph():
-    """Создает взвешенный граф для примера"""
+    # Задаем граф
     G = nx.Graph()
     edges = [
         ('A', 'B', 4), ('A', 'H', 8),
@@ -22,12 +22,11 @@ def create_weighted_graph():
 
 
 def find_mst_with_lp(graph):
-    """Находит MST с помощью линейного программирования (PuLP)"""
     edges = list(graph.edges(data=True))
     nodes = list(graph.nodes())
     n = len(nodes)
 
-    # Создаем задачу LP
+    # Создаем задачу
     prob = pulp.LpProblem("Minimum_Spanning_Tree", pulp.LpMinimize)
 
     # Бинарные переменные для каждого ребра
@@ -57,7 +56,7 @@ def find_mst_with_lp(graph):
     # Решаем задачу
     prob.solve(pulp.PULP_CBC_CMD(msg=False))
 
-    # Собираем MST
+    # Собираем
     mst = nx.Graph()
     for u, v, data in edges:
         if pulp.value(edge_vars[(u, v)]) > 0.5:
@@ -67,7 +66,6 @@ def find_mst_with_lp(graph):
 
 
 def visualize_graphs(original_graph, mst_graph):
-    """Визуализирует графы с помощью pyvis"""
     # Исходный граф
     net_original = Network(height="900px", width="100%")
     for node in original_graph.nodes():
@@ -82,7 +80,6 @@ def visualize_graphs(original_graph, mst_graph):
     for u, v, data in original_graph.edges(data=True):
         net_mst.add_edge(u, v, label=f"{data['weight']}", color='red' if (u, v, data) in mst_graph.edges(data=True) else 'blue')
 
-    # Сохранение в HTML
     net_original.show("original_graph.html", notebook=False)
     net_mst.show("mst_lp.html", notebook=False)
 
@@ -91,13 +88,12 @@ def main():
     # Создаем граф
     G = create_weighted_graph()
 
-    # Находим MST с помощью линейного программирования
+    # Находим дерево
     mst = find_mst_with_lp(G)
 
-    # Выводим информацию
+    # Выводим
     print("Суммарный вес:", sum(data['weight'] for _, _, data in mst.edges(data=True)))
 
-    # Визуализация
     visualize_graphs(G, mst)
 
 

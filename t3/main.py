@@ -14,11 +14,6 @@ def optimize_production_transport_linprog(
         source_node,  # узел производства
         consumers  # словарь {потребитель: узел}
 ):
-    """
-    Оптимизация производства и транспортировки с использованием linprog.
-    Корректно обрабатывает случаи недостатка сырья.
-    """
-
     # Проверки входных данных
     num_raw_materials = len(b)
     num_products = len(p)
@@ -73,7 +68,6 @@ def optimize_production_transport_linprog(
         b_ub.append(b[l])
 
     # 3.2 Ограничения по спросу (для каждого потребителя и товара)
-    # Изменено: теперь это неравенства (<= вместо ==), чтобы допускать неполное удовлетворение спроса
     for consumer, demand_dict in Q.items():
         consumer_node = consumers[consumer]
         for k, quantity in demand_dict.items():
@@ -86,7 +80,7 @@ def optimize_production_transport_linprog(
                         for j in range(num_nodes):
                             if d[i, j] > 0:
                                 if k2 == k and j == consumer_node:
-                                    row[num_x + y_idx] = 1  # sum(y) <= demand
+                                    row[num_x + y_idx] = 1  # sum(y) <= запрос
                                 y_idx += 1
                 A_ub.append(row)
                 b_ub.append(quantity)
@@ -153,7 +147,7 @@ def optimize_production_transport_linprog(
     # Границы переменных (все >= 0)
     bounds = [(0, None) for _ in range(total_vars)]
 
-    # Решаем задачу линейного программирования
+    # Решаем
     res = linprog(c=c_obj, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq,
                   bounds=bounds, method='highs')
 
@@ -299,13 +293,7 @@ def show(res, nodes):
     net.show("transport_graph.html", notebook=False)
 
 
-def generate():
-    pass
-
-
 # Пример использования
 if __name__ == "__main__":
-
-    # generate()
 
     main()

@@ -1,4 +1,5 @@
 from pulp import *
+from time import time
 
 
 def main():
@@ -17,10 +18,10 @@ def main():
     z = LpVariable.dicts("z", ((i, j) for i in range(1, N + 1) for j in range(1, N + 1)), lowBound=0, cat='Continuous')
     b = LpVariable.dicts("b", ((l, m) for l in range(1, L + 1) for m in range(1, M + 1)), lowBound=0, cat='Continuous')
 
-    # Генерация случайных параметров (в реальной задаче нужно заменить на реальные данные)
+    # Генерация случайных параметров
     import numpy as np
 
-    np.random.seed(0)
+    np.random.seed(time())
 
     p = np.random.rand(K, M) * 100  # цены реализации
     A = np.random.rand(L, K) * 0.5  # нормозатраты сырья
@@ -29,7 +30,7 @@ def main():
     Q = np.random.rand(K) * 500  # спрос на товары
     c = np.random.rand(N, N) * 50  # стоимости перевозок
 
-    # Целевая функция: максимизация прибыли (выручка от продаж минус транспортные расходы)
+    # Целевая функция: максимизация прибыли
     model += lpSum(p[k - 1][m - 1] * x[(k, m)] for k in range(1, K + 1) for m in range(1, M + 1)) - \
              lpSum(c[i - 1][j - 1] * u[(i, j)] for i in range(1, N + 1) for j in range(1, N + 1))
 
@@ -61,16 +62,14 @@ def main():
             model += z[(i, j)] >= 0
             model += z[(i, j)] <= d[i - 1][j - 1]
 
-    # 4. Ограничения на поток товаров (упрощенное - в реальной задаче нужно уточнить)
-    # Предположим, что пункт 1 - производитель, пункт N - потребитель
-    # Все произведенные товары должны быть отправлены из пункта 1
+    # 4. Ограничения на поток товаров
     total_production = lpSum(x[(k, m)] for k in range(1, K + 1) for m in range(1, M + 1))
     model += lpSum(z[(1, j)] for j in range(2, N + 1)) >= total_production
 
     # Все товары должны прибыть в пункт N
     model += lpSum(z[(i, N)] for i in range(1, N)) >= total_production
 
-    # Решаем задачу
+    # Решаем
     model.solve()
 
     # Выводим результаты
