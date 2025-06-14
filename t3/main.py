@@ -1,8 +1,6 @@
 import numpy as np
 from scipy.optimize import linprog
 from pyvis.network import Network
-from json import loads, dumps
-from random import randint
 
 
 def optimize_production_transport_linprog(

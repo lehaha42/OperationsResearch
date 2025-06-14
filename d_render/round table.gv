@@ -1,6 +1,0 @@
-// the round table
-digraph "round table" {
-	0
-	1
-	0 -> 1 [label=aaa]
-}

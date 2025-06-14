@@ -1,9 +1,7 @@
-
 import networkx as nx
 from pyvis.network import Network
 import pulp
 from itertools import combinations
-from IPython.display import display, HTML
 
 
 def create_weighted_graph():
